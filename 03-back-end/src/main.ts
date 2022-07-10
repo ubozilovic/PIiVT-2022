@@ -47,5 +47,7 @@ application.use( (req, res) => {
 application.listen(config.server.port);
 
 }
-
+process.on('uncaughtException', error => {
+    console.error('ERROR', error);
+});
 main();
