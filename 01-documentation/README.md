@@ -2,9 +2,9 @@
 
 Ovo je projekat za ispit iz predmeta Praktikum - Internet i veb tehnologije
 
-Broj indeksa: 2021203527
-Ime i prezime: Uros Bozilovic
-Skolska godina: 2021/2022
+Broj indeksa: 2021203527 </br>
+Ime i prezime: Uros Bozilovic</br>
+Skolska godina: 2021/2022</br>
 
 ## Projektni zahtev
 
@@ -21,7 +21,7 @@ Aplikacija omogućava administratoru sajta pekare da uređuje detalje ponude pek
 - Izrada oba dela aplikacije (projekata) i promene kodova datoteka tih projekata moraju da bude praćene korišćenjem alata za verziranje koda Git, a kompletan kôd aplikacije bude dostupan na javnom Git spremištu, npr. na besplatnim GitHub ili Bitbucket servisima, jedno spremište za back-end projekat i jedno za front-end projekat. Ne može ceo projekat da bude otpremljen u samo nekoliko masovnih Git commit-a, već mora da bude pokazano da je projekat realizovan u kontinuitetu, da su korišćene grane (branching), da je bilo paralelnog rada u više grana koje su spojene (merging) sa ili bez konflikata (conflict resolution).
 
 ## Model Baze
-![model baze](/02-resources/modelBaze.png)
+![model baze](/02-resources/modelBaze.PNG)
 **• 	Administrator** <br/>
 o	administrator_id	INTEGER	UN	PK,AI<br/>
 o	username		VARCHAR	64	UQ<br/>
