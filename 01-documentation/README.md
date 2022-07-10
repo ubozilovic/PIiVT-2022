@@ -22,6 +22,8 @@ Aplikacija omogućava administratoru sajta pekare da uređuje detalje ponude pek
 
 ## Model Baze
 ![model baze](/02-resources/modelBaze.PNG)
+
+
 **• 	Administrator** <br/>
 o	administrator_id	INTEGER	UN	PK,AI<br/>
 o	username		VARCHAR	64	UQ<br/>
