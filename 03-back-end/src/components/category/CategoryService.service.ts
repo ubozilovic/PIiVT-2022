@@ -1,6 +1,14 @@
 import CategoryModel from "./CategoryModel.model";
 import * as myslq2 from 'mysql2/promise';
+import IAdapterOptions from "../../common/IAdapterOptions.interface";
+import IngredientService from "../ingredient/IngredientService.service";
 
+interface ICategoryAdapterOptions extends IAdapterOptions{
+    loadIngredients: boolean;
+}
+const DefaultCategoryAdapterOptions: ICategoryAdapterOptions = {
+    loadIngredients: false,
+}
 class CategoryService {
     private db: myslq2.Connection;
 
@@ -8,11 +16,17 @@ class CategoryService {
         this.db = databaseConnection;
     }
 
-    private async adaptToModel(data: any): Promise<CategoryModel> {
+    private async adaptToModel(data: any, options: ICategoryAdapterOptions = DefaultCategoryAdapterOptions): Promise<CategoryModel> {
         const category: CategoryModel = new CategoryModel();
 
         category.categoryId = +data?.category_id;
         category.name = data?.name;
+
+        if(options.loadIngredients) {
+            const ingredientService: IngredientService = new IngredientService(this.db);
+
+            category.ingredients = await ingredientService.getByCategoryId(category.categoryId);
+        }
 
 
         return category;
@@ -29,7 +43,14 @@ class CategoryService {
                 const categories: CategoryModel[] = [];
 
                 for(const row of rows as myslq2.RowDataPacket[]) {
-                    categories.push(await this.adaptToModel(row));
+                    categories.push(
+                        await this.adaptToModel(
+                            row,
+                            {
+                                loadIngredients: true,
+                            }
+                            )
+                        );
                 }
 
                 resolve(categories);
@@ -53,7 +74,12 @@ class CategoryService {
                     if(Array.isArray(rows) && rows.length === 0) {
                         return resolve(null);
                     }
-                    resolve(await this.adaptToModel(rows[0]));
+                    resolve(await this.adaptToModel(
+                        rows[0],
+                        {
+                            loadIngredients: true,
+                        }
+                        ));
                 })
                 .catch(error => {
                     reject(error);
