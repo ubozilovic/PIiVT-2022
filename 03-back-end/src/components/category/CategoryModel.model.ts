@@ -1,5 +1,6 @@
+import IModel from '../../common/IModel.interface';
 import IngredientModel from '../ingredient/IngredientModel.model';
-class CategoryModel {
+class CategoryModel implements IModel {
     categoryId: number;
     name: string;   
 
