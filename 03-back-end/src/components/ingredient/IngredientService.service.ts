@@ -1,7 +1,7 @@
 import IngredientModel from "./IngredientModel.model";
-import * as myslq2 from 'mysql2/promise';
 import BaseService from "../../common/BaseService";
 import IAdapterOptions from "../../common/IAdapterOptions.interface";
+import { IAddCategoryServiceDto } from "../category/dto/IAddCategory.dto";
 
 class IngredientAdapterOptions implements IAdapterOptions {
 
@@ -24,29 +24,34 @@ class IngredientService extends BaseService<IngredientModel, IngredientAdapterOp
         return ingredient;
     }
 
-    public async getByCategoryId(categoryId: number): Promise<IngredientModel[]> {
-        return new Promise<IngredientModel[]>(
-            (resolve, reject) => {
-                const sql: string = "SELECT * FROM `ingredient` WHERE category_id = ? ORDER BY `name`;";
-                this.db.execute(sql,[categoryId])
-                .then(async ([rows]) => {
-                    if (rows === undefined) {
-                        return resolve([]);
+    public async getAllByCategoryId(categoryId: number, options: IngredientAdapterOptions): Promise<IngredientModel[]> {
+        return this.getAllByFieldNameAnValue('category_id', categoryId, options );
+    }
+
+    public async add(data: IAddCategoryServiceDto): Promise<IngredientModel> {
+        return new Promise<IngredientModel>((resolve, reject) => {
+            const sql: string = "INSERT `ingredient` SET `name` = ?, `category_id` = ?, `ingredient_type` = ?;";
+
+            this.db.execute(sql,[ data.name, data.categoryId, data.ingredient_type ])
+                .then(async result => {
+                    const info: any = result;
+
+                    const newIngredientId = +(info[0]?.insertId);
+
+                    const newIngredient: IngredientModel|null = await this.getById(newIngredientId, {});
+
+                    if(newIngredient === null){
+                    return reject({
+                            message: 'Duplicate ingredient name in this category', });
                     }
-                    const categories: IngredientModel[] = [];
-    
-                    for(const row of rows as myslq2.RowDataPacket[]) {
-                        categories.push(await this.adaptToModel(row));
-                    }
-    
-                    resolve(categories);
+
+                    resolve(newIngredient);
+
                 })
                 .catch(error => {
-                    reject(error); 
+                    reject(error);
                 });
-            }
-            
-        );
+        });
     }
 }
 

@@ -1,24 +1,16 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               10.7.3-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
--- HeidiSQL Version:             11.3.0.6295
--- --------------------------------------------------------
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
--- Dumping database structure for piivt_app
 DROP DATABASE IF EXISTS `piivt_app`;
 CREATE DATABASE IF NOT EXISTS `piivt_app` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 USE `piivt_app`;
 
--- Dumping structure for table piivt_app.administrator
 DROP TABLE IF EXISTS `administrator`;
 CREATE TABLE IF NOT EXISTS `administrator` (
   `administrator_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -30,35 +22,53 @@ CREATE TABLE IF NOT EXISTS `administrator` (
   UNIQUE KEY `uq_administrator_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table piivt_app.category
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE IF NOT EXISTS `category` (
   `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`category_id`),
   UNIQUE KEY `uq_category_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
+INSERT INTO `category` (`category_id`, `name`) VALUES
+	(2, 'Hleb'),
+	(4, 'Kolaci'),
+	(5, 'Mlecni proizvodi'),
+	(1, 'Peciva'),
+	(8, 'Pi'),
+	(6, 'Pice'),
+	(3, 'Pite');
 
--- Dumping structure for table piivt_app.ingredient
 DROP TABLE IF EXISTS `ingredient`;
 CREATE TABLE IF NOT EXISTS `ingredient` (
   `ingredient_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` int(10) unsigned NOT NULL,
-  `ingredient_type` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ingredient_type` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`ingredient_id`),
   UNIQUE KEY `uq_ingredient_name_category_id` (`name`,`category_id`),
   KEY `fk_ingredient_category_id` (`category_id`),
   CONSTRAINT `fk_ingredient_category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
+INSERT INTO `ingredient` (`ingredient_id`, `name`, `category_id`, `ingredient_type`) VALUES
+	(1, 'Belo brasno', 1, 'vegetarijanci,vegani,ostalo'),
+	(2, 'heljdino brasno', 1, 'vegetarijanci,vegani,ostalo'),
+	(3, 'integralno brasno', 1, 'vegetarijanci,vegani,ostalo'),
+	(4, 'coko krem', 1, 'vegetarijanci,ostalo'),
+	(5, 'dzem', 1, 'vegetarijanci,vegani,ostalo'),
+	(6, 'so', 2, 'vegetarijanci,vegani,ostalo'),
+	(7, 'kvacas', 2, 'vegetarijanci,vegani,ostalo'),
+	(8, 'brasno', 2, 'vegetarijanci,vegani,ostalo'),
+	(9, 'voda', 2, 'vegetarijanci,vegani,ostalo'),
+	(10, 'meso', 3, 'ostalo'),
+	(11, 'sir', 3, 'vegetarijanci,ostalo'),
+	(12, 'krompir', 3, 'vegetarijanci,vegani,ostalo'),
+	(13, 'vanila', 4, 'vegetarijanci,vegani,ostalo'),
+	(14, 'krem', 4, 'vegetarijanci,ostalo'),
+	(16, 'Secer', 2, 'vegetarijanci,vegani,ostalo');
 
--- Dumping structure for table piivt_app.item
 DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
   `item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -72,9 +82,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   CONSTRAINT `fk_item_category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table piivt_app.item_ingredient
 DROP TABLE IF EXISTS `item_ingredient`;
 CREATE TABLE IF NOT EXISTS `item_ingredient` (
   `item_ingredient_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -87,9 +95,7 @@ CREATE TABLE IF NOT EXISTS `item_ingredient` (
   CONSTRAINT `fk_ingredient_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table piivt_app.item_size
 DROP TABLE IF EXISTS `item_size`;
 CREATE TABLE IF NOT EXISTS `item_size` (
   `item_size_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -104,9 +110,7 @@ CREATE TABLE IF NOT EXISTS `item_size` (
   CONSTRAINT `fk_item_size_size_id` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table piivt_app.photo
 DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
   `photo_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -119,9 +123,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
   CONSTRAINT `fk_photo_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table piivt_app.size
 DROP TABLE IF EXISTS `size`;
 CREATE TABLE IF NOT EXISTS `size` (
   `size_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -130,8 +132,8 @@ CREATE TABLE IF NOT EXISTS `size` (
   UNIQUE KEY `uq_size_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

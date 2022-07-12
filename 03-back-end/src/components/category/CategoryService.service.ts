@@ -1,9 +1,7 @@
 import CategoryModel from "./CategoryModel.model";
-import * as myslq2 from 'mysql2/promise';
 import IAdapterOptions from "../../common/IAdapterOptions.interface";
 import IngredientService from "../ingredient/IngredientService.service";
 import IAddCategory from "./dto/IAddCategory.dto";
-import { ResultSetHeader } from "mysql2/promise";
 import BaseService from "../../common/BaseService";
 
 interface ICategoryAdapterOptions extends IAdapterOptions{
@@ -27,7 +25,7 @@ class CategoryService extends BaseService<CategoryModel,ICategoryAdapterOptions>
         if(options.loadIngredients) {
             const ingredientService: IngredientService = new IngredientService(this.db);
 
-            category.ingredients = await ingredientService.getByCategoryId(category.categoryId);
+            category.ingredients = await ingredientService.getAllByCategoryId(category.categoryId, {});
         }
 
 
@@ -36,7 +34,7 @@ class CategoryService extends BaseService<CategoryModel,ICategoryAdapterOptions>
 
     public async add(data: IAddCategory): Promise<CategoryModel> {
         return new Promise<CategoryModel>((resolve, reject) => {
-            const sql: string = "INSERT `category` set `name` =?;";
+            const sql: string = "INSERT `category` SET `name` =?;";
 
             this.db.execute(sql,[ data.name ])
                 .then(async result => {

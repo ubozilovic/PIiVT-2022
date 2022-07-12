@@ -73,4 +73,33 @@ export default abstract class BaseService<ReturnModel extends IModel, AdapterOpt
             
         );
     }
+    protected async getAllByFieldNameAnValue(fieldName: string, value: any, options: AdapterOptions): Promise<ReturnModel[]> {
+        const tableName = this.tableName();
+
+        return new Promise<ReturnModel[]>(
+            (resolve, reject) => {
+                const sql: string = `SELECT * FROM \`${ tableName }\` WHERE \`${ fieldName }\` = ?;`;
+
+                this.db.execute(sql,[value])
+                .then(async ([rows]) => {
+                    if (rows === undefined) {
+                        return resolve([]);
+                    }
+                    const categories: ReturnModel[] = [];
+    
+                    for(const row of rows as myslq2.RowDataPacket[]) {
+                        categories.push(await this.adaptToModel(row, options));
+                    }
+    
+                    resolve(categories);
+                })
+                .catch(error => {
+                    reject(error); 
+                });
+            }
+            
+        );
+    }
+    
+    
 }

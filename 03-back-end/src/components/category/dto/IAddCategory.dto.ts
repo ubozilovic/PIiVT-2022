@@ -6,6 +6,11 @@ export default interface IAddCategory {
     name: string;
 }
 
+interface IAddCategoryServiceDto {
+    name: string;
+    categoryId: number;  
+    ingredient_type: string;
+}
 
 const AddCategoryValidator = ajv.compile({
     type: "object",
@@ -22,4 +27,4 @@ const AddCategoryValidator = ajv.compile({
     additionalProperties: false,
 });
 
-export { AddCategoryValidator };
+export { AddCategoryValidator, IAddCategoryServiceDto };
