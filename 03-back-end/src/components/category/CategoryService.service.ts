@@ -3,6 +3,7 @@ import IAdapterOptions from "../../common/IAdapterOptions.interface";
 import IngredientService from "../ingredient/IngredientService.service";
 import IAddCategory from "./dto/IAddCategory.dto";
 import BaseService from "../../common/BaseService";
+import IEditCategory from "./dto/IEditCategory.dto";
 
 interface ICategoryAdapterOptions extends IAdapterOptions{
     loadIngredients: boolean;
@@ -34,6 +35,10 @@ class CategoryService extends BaseService<CategoryModel,ICategoryAdapterOptions>
 
     public async add(data: IAddCategory): Promise<CategoryModel> {
         return this.baseAdd(data, DefaultCategoryAdapterOptions);
+    }
+    
+    public async editById(categoryId: number, data: IEditCategory, options: ICategoryAdapterOptions = DefaultCategoryAdapterOptions): Promise<CategoryModel> {
+        return this.baseEditById(categoryId, data, options);
     }
 }
 
