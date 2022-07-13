@@ -1,23 +1,16 @@
 import { Request, response, Response } from "express";
+import BaseController from "../../common/BaseController";
 import IAddIngredient, { AddIngredientValidator, IAddIngredientDto } from "../ingredient/dto/IAddIngredient.dto";
 import IEditIngredientDto, { EditIngredientValidator } from "../ingredient/dto/IEditIngredient.dto";
 
-import IngredientService from "../ingredient/IngredientService.service";
 import CategoryService, { DefaultCategoryAdapterOptions } from './CategoryService.service';
 import IAddCategory, { AddCategoryValidator } from "./dto/IAddCategory.dto";
 import IEditCategory, { EditCategoryValidator, IEditCategoryDto } from "./dto/IEditCategory.dto";
-class CategoryController {
-    private categoryService: CategoryService;
-    private ingredientService: IngredientService;
-
-    constructor(categoryService: CategoryService, ingredientService: IngredientService){
-        this.categoryService = categoryService;
-        this.ingredientService = ingredientService;
-        
-    }
+class CategoryController extends BaseController {
+    
 
     async getAll(req: Request, res: Response) {
-       this.categoryService.getAll(DefaultCategoryAdapterOptions)
+       this.services.category.getAll(DefaultCategoryAdapterOptions)
        .then(result => {
         res.send(result);
        })
@@ -28,7 +21,7 @@ class CategoryController {
     async getById(req: Request, res: Response) {
         const id: number = +req.params?.id;
        
-        this.categoryService.getById(id, {
+        this.services.category.getById(id, {
             loadIngredients: true
         })
             .then(result => {
@@ -50,7 +43,7 @@ class CategoryController {
             res.status(400).send(AddCategoryValidator.errors);
         }
 
-        this.categoryService.add(data)
+        this.services.category.add(data)
         .then(result => {
             res.send(result);
         })
@@ -68,13 +61,13 @@ class CategoryController {
             res.status(400).send(EditCategoryValidator.errors);
         }
 
-        this.categoryService.getById(id, {loadIngredients: false})
+        this.services.category.getById(id, {loadIngredients: false})
             .then(result => {
                 if( result === null) {
                     return res.sendStatus(404);
                 }
                 
-                this.categoryService.editById(id,
+                this.services.category.editById(id,
                      {
                     name: data.name
                      },
@@ -105,13 +98,13 @@ class CategoryController {
             return res.status(400).send(AddIngredientValidator.errors);
         }
         
-        this.categoryService.getById(categoryId, { loadIngredients: false })
+        this.services.category.getById(categoryId, { loadIngredients: false })
             .then(result => {
                 if( result === null) {
                     return res.sendStatus(404);
                 }
 
-                this.ingredientService.add({
+                this.services.ingredient.add({
                     name: data.name,
                     category_id: categoryId,
                     ingredient_type: data.ingredient_type
@@ -136,13 +129,13 @@ class CategoryController {
         if(!EditIngredientValidator(data)) {
             return res.status(400).send(EditIngredientValidator.errors);
         }
-        this.categoryService.getById(categoryId, { loadIngredients: false })
+        this.services.category.getById(categoryId, { loadIngredients: false })
             .then(result => {
                 if( result === null) {
                     return res.status(404).send('Category not found');
                 }
 
-                this.ingredientService.getById(ingredientId, {})
+                this.services.ingredient.getById(ingredientId, {})
                 .then(result => {
                     if (result === null) {
                         return res.status(404).send('Ingredient not found');
@@ -152,7 +145,7 @@ class CategoryController {
                         return res.status(400).send('This ingredient doesn`t belong to this category');
                     }
 
-                    this.ingredientService.editById(ingredientId, data)
+                    this.services.ingredient.editById(ingredientId, data)
                     .then(result => {
                         res.send(result);
                     });

@@ -5,12 +5,13 @@ import { DevConfig } from "./configs";
 import CategoryRouter from "./components/category/CategoryRouter.router";
 import IApplicationRecources from "./common/IApplicationResources.interface";
 import * as myslq2 from "mysql2/promise";
+import CategoryService from "./components/category/CategoryService.service";
+import IngredientService from "./components/ingredient/IngredientService.service";
 
 async function main() {
     const config: IConfig = DevConfig;
 
-const applicationResources: IApplicationRecources = {
-    databaseConnection: await myslq2.createConnection({
+    const db = await myslq2.createConnection({
         host: config.database.host,
         port: config.database.port,
         user: config.database.user,
@@ -19,7 +20,14 @@ const applicationResources: IApplicationRecources = {
         charset: config.database.charset,
         timezone: config.database.timezone,
         supportBigNumbers: config.database.supportBigNumbers,
-    }),
+    });
+
+const applicationResources: IApplicationRecources = {
+    databaseConnection: db,
+    services: {
+        category: new CategoryService(db),
+        ingredient: new IngredientService(db),
+    }
 };
 
 const application: express.Application = express();
