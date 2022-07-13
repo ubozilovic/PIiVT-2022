@@ -4,18 +4,17 @@ import IServiceData from "../../../common/IServiceData.interface";
 const ajv = new Ajv();
 
 
-export interface IAddIngredientDto {
+export interface IEditIngredientDto {
     name: string; 
     ingredient_type: string;
 }
-export default interface IAddIngredient extends IServiceData {
+export default interface IEditIngredient extends IServiceData {
     name: string;
-    category_id: number;
     ingredient_type: string;
 }
 
 
-const AddIngredientValidator = ajv.compile({
+const EditIngredientValidator = ajv.compile({
     type: "object",
     properties: {
         name: {
@@ -38,4 +37,4 @@ const AddIngredientValidator = ajv.compile({
     additionalProperties: false,
 });
 
-export { AddIngredientValidator };
+export { EditIngredientValidator };
