@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import IAddIngredient, { AddIngredientValidator } from "../ingredient/dto/IAddIngredient.dto";
+import IAddIngredient, { AddIngredientValidator, IAddIngredientDto } from "../ingredient/dto/IAddIngredient.dto";
 
 import IngredientService from "../ingredient/IngredientService.service";
 import CategoryService, { DefaultCategoryAdapterOptions } from './CategoryService.service';
@@ -59,12 +59,12 @@ class CategoryController {
 
     async addIngredient(req: Request, res: Response) {
         const categoryId: number = +req.params?.cid;
-        const data = req.body as IAddIngredient;
+        const data = req.body as IAddIngredientDto;
 
         if(!AddIngredientValidator(data)) {
             return res.status(400).send(AddIngredientValidator.errors);
         }
-
+        
         this.categoryService.getById(categoryId, { loadIngredients: false })
             .then(result => {
                 if( result === null) {
@@ -73,7 +73,7 @@ class CategoryController {
 
                 this.ingredientService.add({
                     name: data.name,
-                    categoryId: categoryId,
+                    category_id: categoryId,
                     ingredient_type: data.ingredient_type
                 })
                 .then(result => {

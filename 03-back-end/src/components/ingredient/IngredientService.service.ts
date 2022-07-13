@@ -1,7 +1,7 @@
 import IngredientModel from "./IngredientModel.model";
 import BaseService from "../../common/BaseService";
 import IAdapterOptions from "../../common/IAdapterOptions.interface";
-import { IAddCategoryServiceDto } from "../category/dto/IAddCategory.dto";
+import IAddIngredient from "./dto/IAddIngredient.dto";
 
 class IngredientAdapterOptions implements IAdapterOptions {
 
@@ -28,30 +28,8 @@ class IngredientService extends BaseService<IngredientModel, IngredientAdapterOp
         return this.getAllByFieldNameAnValue('category_id', categoryId, options );
     }
 
-    public async add(data: IAddCategoryServiceDto): Promise<IngredientModel> {
-        return new Promise<IngredientModel>((resolve, reject) => {
-            const sql: string = "INSERT `ingredient` SET `name` = ?, `category_id` = ?, `ingredient_type` = ?;";
-
-            this.db.execute(sql,[ data.name, data.categoryId, data.ingredient_type ])
-                .then(async result => {
-                    const info: any = result;
-
-                    const newIngredientId = +(info[0]?.insertId);
-
-                    const newIngredient: IngredientModel|null = await this.getById(newIngredientId, {});
-
-                    if(newIngredient === null){
-                    return reject({
-                            message: 'Duplicate ingredient name in this category', });
-                    }
-
-                    resolve(newIngredient);
-
-                })
-                .catch(error => {
-                    reject(error);
-                });
-        });
+    public async add(data: IAddIngredient): Promise<IngredientModel> {
+        return this.baseAdd(data, {});
     }
 }
 

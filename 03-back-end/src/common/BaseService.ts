@@ -1,6 +1,7 @@
 import * as myslq2 from "mysql2/promise";
 import IAdapterOptions from './IAdapterOptions.interface';
 import IModel from "./IModel.interface";
+import IServiceData from "./IServiceData.interface";
 
 export default abstract class BaseService<ReturnModel extends IModel, AdapterOptions extends IAdapterOptions> {
     private database: myslq2.Connection;
@@ -100,6 +101,36 @@ export default abstract class BaseService<ReturnModel extends IModel, AdapterOpt
             
         );
     }
+
+
+    protected async baseAdd(data: IServiceData, options: AdapterOptions): Promise<ReturnModel> {
+        const tableName = this.tableName();
+            return new Promise((resolve, reject) => {
+                const properties = Object.getOwnPropertyNames(data);
+                const sqlPairs = properties.map(property => "`" + property + "` = ?").join(", ");
+                const values = properties.map(property => data[property]);
+
+                const sql: string = "INSERT `"+ tableName +"` SET "+ sqlPairs +";";
     
+                this.db.execute(sql,values)
+                    .then(async result => {
+                        const info: any = result;
     
+                        const newItemId = +(info[0]?.insertId);
+    
+                        const newItem: ReturnModel|null = await this.getById(newItemId, options);
+    
+                        if(newItem === null){
+                        return reject({
+                                message: 'Could not add a new item into the '+ tableName +' table', });
+                        }
+    
+                        resolve(newItem);
+    
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        }
 }

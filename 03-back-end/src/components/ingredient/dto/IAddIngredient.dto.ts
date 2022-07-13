@@ -1,9 +1,17 @@
 import Ajv from "ajv";
+import IServiceData from "../../../common/IServiceData.interface";
 
 const ajv = new Ajv();
 
-export default interface IAddIngredient {
+
+export interface IAddIngredientDto {
     name: string;
+    
+    ingredient_type: string;
+}
+export default interface IAddIngredient extends IServiceData {
+    name: string;
+    category_id: number;
     ingredient_type: string;
 }
 
