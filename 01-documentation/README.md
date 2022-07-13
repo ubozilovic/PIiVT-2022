@@ -2,9 +2,9 @@
 
 Ovo je projekat za ispit iz predmeta Praktikum - Internet i veb tehnologije
 
-Broj indeksa: 2021203527 </br>
-Ime i prezime: Uros Bozilovic</br>
-Skolska godina: 2021/2022</br>
+ Broj indeksa: 2021203527 </br>
+ Ime i prezime: Uros Bozilovic</br>
+ Skolska godina: 2021/2022</br>
 
 ## Projektni zahtev
 
