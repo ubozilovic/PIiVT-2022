@@ -24,9 +24,7 @@ class CategoryService extends BaseService<CategoryModel,ICategoryAdapterOptions>
         category.name = data?.name;
 
         if(options.loadIngredients) {
-            const ingredientService: IngredientService = new IngredientService(this.db);
-
-            category.ingredients = await ingredientService.getAllByCategoryId(category.categoryId, {});
+            category.ingredients = await this.services.ingredient.getAllByCategoryId(category.categoryId, {});
         }
 
 

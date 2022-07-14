@@ -1,17 +1,24 @@
 import * as myslq2 from "mysql2/promise";
 import IAdapterOptions from './IAdapterOptions.interface';
+import IApplicationRecources, { IServices } from "./IApplicationResources.interface";
 import IModel from "./IModel.interface";
 import IServiceData from "./IServiceData.interface";
 
 export default abstract class BaseService<ReturnModel extends IModel, AdapterOptions extends IAdapterOptions> {
     private database: myslq2.Connection;
+    private serviceInstances: IServices;
 
-    constructor(databaseConnection: myslq2.Connection){
-        this.database = databaseConnection;
+    constructor(resources: IApplicationRecources){
+        this.database = resources.databaseConnection;
+        this.serviceInstances = resources.services;
     }
 
    protected get db(): myslq2.Connection {
     return this.database;
+   }
+
+   protected get services(): IServices {
+    return this.serviceInstances;
    }
 
    abstract tableName(): string;
@@ -74,7 +81,7 @@ export default abstract class BaseService<ReturnModel extends IModel, AdapterOpt
             
         );
     }
-    protected async getAllByFieldNameAnValue(fieldName: string, value: any, options: AdapterOptions): Promise<ReturnModel[]> {
+    protected async getAllByFieldNameAndValue(fieldName: string, value: any, options: AdapterOptions): Promise<ReturnModel[]> {
         const tableName = this.tableName();
 
         return new Promise<ReturnModel[]>(
@@ -86,13 +93,13 @@ export default abstract class BaseService<ReturnModel extends IModel, AdapterOpt
                     if (rows === undefined) {
                         return resolve([]);
                     }
-                    const categories: ReturnModel[] = [];
+                    const items: ReturnModel[] = [];
     
                     for(const row of rows as myslq2.RowDataPacket[]) {
-                        categories.push(await this.adaptToModel(row, options));
+                        items.push(await this.adaptToModel(row, options));
                     }
     
-                    resolve(categories);
+                    resolve(items);
                 })
                 .catch(error => {
                     reject(error); 
@@ -102,6 +109,31 @@ export default abstract class BaseService<ReturnModel extends IModel, AdapterOpt
         );
     }
 
+
+    protected async getAllFromTableByFieldNameAndValue<OwnReturnType>(tableName: string, fieldName: string, value: any): Promise<OwnReturnType[]> {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT * FROM \`${ tableName }\` WHERE \`${ fieldName }\` = ?;`;
+
+                this.db.execute(sql,[value])
+                .then(async ([rows]) => {
+                    if (rows === undefined) {
+                        return resolve([]);
+                    }
+                    const items: OwnReturnType[] = [];
+    
+                    for(const row of rows as myslq2.RowDataPacket[]) {
+                        items.push(row as OwnReturnType);
+                    }
+    
+                    resolve(items);
+                })
+                .catch(error => {
+                    reject(error); 
+                });
+        })
+    }
+
+    
 
     protected async baseAdd(data: IServiceData, options: AdapterOptions): Promise<ReturnModel> {
         const tableName = this.tableName();
