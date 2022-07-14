@@ -1,17 +1,23 @@
 import BaseService from "../../common/BaseService"
 import IAdapterOptions from "../../common/IAdapterOptions.interface"
 import ItemModel from "./ItemModel.model"
+import IAddItem, { IItemIngredient, IItemSize } from './dto/IAddItem.dto';
+import IEditItem from "./dto/IEditItem.dto";
 
 export interface IItemAdapterOptions extends IAdapterOptions {
     loadCategory: boolean,
     loadSizes: boolean,
+    hideInactiveSizes: boolean,
     loadIngredients: boolean,
+    loadPhotos: boolean,
 }
 
-export class DefaultItemAdapterOptions implements IItemAdapterOptions {
-    loadCategory: false;
-    loadSizes: false;
-    loadIngredients: false;
+export const DefaultItemAdapterOptions: IItemAdapterOptions = {
+    loadCategory: false,
+    loadSizes: false,
+    hideInactiveSizes: true,
+    loadIngredients: false,
+    loadPhotos: false,
 }
 
 export default class ItemService extends BaseService<ItemModel, IItemAdapterOptions> {
@@ -43,11 +49,52 @@ export default class ItemService extends BaseService<ItemModel, IItemAdapterOpti
                 item.ingredients = await this.services.ingredient.getAllByItemId(item.itemId, {});
             }
 
+            if (options.loadPhotos) {
+                item.photos = await this.services.photo.getAllByItemId(item.itemId);
+            }
+
             resolve(item);
         })
     }
+    
     async getAllByCategoryId(categoryId: number, options: IItemAdapterOptions) {
         return this.getAllByFieldNameAndValue("category_id", categoryId, options);
     }
+   
+    async add(data: IAddItem): Promise<ItemModel> {
+        return this.baseAdd(data, DefaultItemAdapterOptions);
+    }
 
+    async addItemIngredient(data: IItemIngredient): Promise<number> {
+        return new Promise((resolve, reject) => {
+            const sql: string = "INSERT item_ingredient SET item_id = ?, ingredient_id = ?;";
+
+            this.db.execute(sql, [ data.item_id, data.ingredient_id ])
+            .then(async result => {
+                const info: any = result;
+                resolve(+(info[0]?.insertId));
+            })
+            .catch(error => {
+                reject(error);
+            });
+        })
+    }
+
+    async addItemSize(data: IItemSize): Promise<number> {
+        return new Promise((resolve, reject) => {
+            const sql: string = "INSERT item_size SET item_id = ?, size_id = ?, price = ?, kcal = ?;";
+
+            this.db.execute(sql, [ data.item_id, data.size_id, data.price, data.kcal ])
+            .then(async result => {
+                const info: any = result;
+                resolve(+(info[0]?.insertId));
+            })
+            .catch(error => {
+                reject(error);
+            });
+        })
+    }
+    async edit(itemId: number, data: IEditItem, options: IItemAdapterOptions): Promise<ItemModel> {
+        return this.baseEditById(itemId, data, options);
+    }
 }

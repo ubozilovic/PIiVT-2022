@@ -1,6 +1,7 @@
 import IModel from "../../common/IModel.interface";
 import CategoryModel from "../category/CategoryModel.model";
 import IngredientModel from "../ingredient/IngredientModel.model";
+import PhotoModel from "../photo/PhotoModel.model";
 import SizeModel from "../size/SizeModel.model";
 
 
@@ -20,5 +21,6 @@ export default class ItemModel implements IModel {
     category?: CategoryModel = null;
     sizes?: IItemSize[] = [];
     ingredients?: IngredientModel[] = [];
+    photos?: PhotoModel[] = [];
     
 }

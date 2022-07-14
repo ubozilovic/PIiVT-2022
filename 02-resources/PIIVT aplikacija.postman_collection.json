@@ -92,6 +92,35 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Item",
+			"item": [
+				{
+					"name": "Get all items from a category",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get a single item",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Upload photos",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [

@@ -86,8 +86,11 @@ CREATE TABLE IF NOT EXISTS `item` (
   UNIQUE KEY `uq_item_name_category_id` (`name`,`category_id`),
   KEY `fk_item_category_id` (`category_id`),
   CONSTRAINT `fk_item_category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `item` (`item_id`, `name`, `description`, `category_id`, `is_active`) VALUES
+	(1, 'kifla', 'domaca kifla', 1, 1),
+	(2, 'pita', 'pita meso', 3, 1);
 
 DROP TABLE IF EXISTS `item_ingredient`;
 CREATE TABLE IF NOT EXISTS `item_ingredient` (
@@ -99,8 +102,15 @@ CREATE TABLE IF NOT EXISTS `item_ingredient` (
   KEY `fk_ingredient_ingredient_id` (`ingredient_id`),
   CONSTRAINT `fk_ingredient_ingredient_id` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredient` (`ingredient_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_ingredient_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `item_ingredient` (`item_ingredient_id`, `item_id`, `ingredient_id`) VALUES
+	(2, 1, 1),
+	(1, 1, 4),
+	(3, 1, 7),
+	(6, 2, 6),
+	(5, 2, 8),
+	(4, 2, 10);
 
 DROP TABLE IF EXISTS `item_size`;
 CREATE TABLE IF NOT EXISTS `item_size` (
@@ -114,8 +124,12 @@ CREATE TABLE IF NOT EXISTS `item_size` (
   KEY `fk_item_size_size_id` (`size_id`),
   CONSTRAINT `fk_item_size_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_item_size_size_id` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `item_size` (`item_size_id`, `item_id`, `size_id`, `price`, `kcal`) VALUES
+	(1, 1, 1, 80.00, 333.00),
+	(2, 1, 2, 150.00, 450.00),
+	(3, 2, 2, 155.00, 610.00);
 
 DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
@@ -136,8 +150,12 @@ CREATE TABLE IF NOT EXISTS `size` (
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`size_id`),
   UNIQUE KEY `uq_size_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `size` (`size_id`, `name`) VALUES
+	(2, 'L'),
+	(1, 'M'),
+	(3, 'XL');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
