@@ -32,6 +32,14 @@
 						"header": []
 					},
 					"response": []
+				},
+				{
+					"name": "Edit a single category",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
@@ -40,6 +48,43 @@
 			"item": [
 				{
 					"name": "Add a new ingredient",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Edit a single ingredient",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Administrator",
+			"item": [
+				{
+					"name": "Get all",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Add a new admin",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Edit an admin",
 					"request": {
 						"method": "GET",
 						"header": []

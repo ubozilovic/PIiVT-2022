@@ -7,6 +7,7 @@ import IApplicationRecources from "./common/IApplicationResources.interface";
 import * as myslq2 from "mysql2/promise";
 import CategoryService from "./components/category/CategoryService.service";
 import IngredientService from "./components/ingredient/IngredientService.service";
+import AdministratorService from "./components/administrator/AdministratorService.service";
 
 async function main() {
     const config: IConfig = DevConfig;
@@ -27,6 +28,7 @@ const applicationResources: IApplicationRecources = {
     services: {
         category: new CategoryService(db),
         ingredient: new IngredientService(db),
+        administrator: new AdministratorService(db),
     }
 };
 

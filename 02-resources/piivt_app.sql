@@ -20,8 +20,11 @@ CREATE TABLE IF NOT EXISTS `administrator` (
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT 1,
   PRIMARY KEY (`administrator_id`),
   UNIQUE KEY `uq_administrator_username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `administrator` (`administrator_id`, `username`, `password_hash`, `created_at`, `is_active`) VALUES
+	(1, 'admin', '123', '2022-07-13 23:35:05', 1),
+	(2, 'administrator', '$2b$10$tsKzqDgq.W6xm9QiS/LHruAz8aiuNpFljmixjoHzKiP.KPCXNXbee', '2022-07-14 00:09:37', 1);
 
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE IF NOT EXISTS `category` (
@@ -29,12 +32,13 @@ CREATE TABLE IF NOT EXISTS `category` (
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`category_id`),
   UNIQUE KEY `uq_category_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `category` (`category_id`, `name`) VALUES
 	(2, 'Hleb'),
 	(4, 'Kolaci'),
 	(5, 'Mlecni proizvodi'),
+	(9, 'New category'),
 	(1, 'Peciva'),
 	(8, 'Pi'),
 	(6, 'Pice'),
@@ -45,12 +49,12 @@ CREATE TABLE IF NOT EXISTS `ingredient` (
   `ingredient_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` int(10) unsigned NOT NULL,
-  `ingredient_type` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ingredient_type` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`ingredient_id`),
   UNIQUE KEY `uq_ingredient_name_category_id` (`name`,`category_id`),
   KEY `fk_ingredient_category_id` (`category_id`),
   CONSTRAINT `fk_ingredient_category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `ingredient` (`ingredient_id`, `name`, `category_id`, `ingredient_type`) VALUES
 	(1, 'Belo brasno', 1, 'vegetarijanci,vegani,ostalo'),
@@ -67,7 +71,9 @@ INSERT INTO `ingredient` (`ingredient_id`, `name`, `category_id`, `ingredient_ty
 	(12, 'krompir', 3, 'vegetarijanci,vegani,ostalo'),
 	(13, 'vanila', 4, 'vegetarijanci,vegani,ostalo'),
 	(14, 'krem', 4, 'vegetarijanci,ostalo'),
-	(16, 'Secer', 2, 'vegetarijanci,vegani,ostalo');
+	(16, 'Secer', 2, 'vegetarijanci,vegani,ostalo'),
+	(17, 'jogurt', 5, 'vegetarijanci,ostalo'),
+	(19, 'mleko', 5, 'vegetarijanci,ostalo');
 
 DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
