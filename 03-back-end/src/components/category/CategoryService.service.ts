@@ -1,10 +1,8 @@
 import CategoryModel from "./CategoryModel.model";
 import IAdapterOptions from "../../common/IAdapterOptions.interface";
-import IngredientService from "../ingredient/IngredientService.service";
 import IAddCategory from "./dto/IAddCategory.dto";
 import BaseService from "../../common/BaseService";
 import IEditCategory from "./dto/IEditCategory.dto";
-
 interface ICategoryAdapterOptions extends IAdapterOptions{
     loadIngredients: boolean;
 }
@@ -39,6 +37,5 @@ class CategoryService extends BaseService<CategoryModel,ICategoryAdapterOptions>
         return this.baseEditById(categoryId, data, options);
     }
 }
-
 export default CategoryService;
 export { DefaultCategoryAdapterOptions };

@@ -24,7 +24,7 @@ export default class ItemController extends BaseController {
             }
 
             this.services.item.getAllByCategoryId(categoryId, {
-                loadCategory: true,
+                loadCategory: false,
                 loadIngredients: true,
                 loadSizes: true,
                 hideInactiveSizes: true,
@@ -353,5 +353,8 @@ export default class ItemController extends BaseController {
         })
         .toFile(config.server.static.path + "/" + directory + resizeOptions.prefix + filename);
     }
+
+    
+    
 
 }

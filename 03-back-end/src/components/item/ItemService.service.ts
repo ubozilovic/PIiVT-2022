@@ -21,6 +21,9 @@ export const DefaultItemAdapterOptions: IItemAdapterOptions = {
 }
 
 export default class ItemService extends BaseService<ItemModel, IItemAdapterOptions> {
+    startTransaction() {
+        throw new Error("Method not implemented.");
+    }
     tableName(): string {
         return "item";
     }
@@ -96,5 +99,27 @@ export default class ItemService extends BaseService<ItemModel, IItemAdapterOpti
     }
     async edit(itemId: number, data: IEditItem, options: IItemAdapterOptions): Promise<ItemModel> {
         return this.baseEditById(itemId, data, options);
+    }
+    async editItemSize(data: IItemSize): Promise<true> {
+        return new Promise((resolve, reject) => {
+            const sql: string = "UPDATE item_size SET price = ?, kcal = ? WHERE item_id = ? AND size_id = ?;";
+
+            this.db.execute(sql, [ data.price, data.kcal, data.item_id, data.size_id ])
+            .then(result => {
+                const info: any = result;
+
+                if (+info[0]?.affectedRows === 1) {
+                    return resolve(true);
+                }
+
+                throw {
+                    status: 500,
+                    message: "Could not edit this item size record!",
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
+        })
     }
 }

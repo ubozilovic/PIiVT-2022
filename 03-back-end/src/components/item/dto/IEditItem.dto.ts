@@ -16,6 +16,7 @@ export interface IEditItemDto {
 }
 
 export default interface IEditItem extends IServiceData {
+    ingredientIds: any;
     name: string;
     description: string;
     is_active: number;

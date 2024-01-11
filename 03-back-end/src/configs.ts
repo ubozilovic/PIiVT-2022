@@ -1,6 +1,7 @@
 import IConfig from './common/IConfig.interface';
 import AdministratorRouter from './components/administrator/AdministratorRouter.router';
 import CategoryRouter from './components/category/CategoryRouter.router';
+import SizeRouter from "./components/size/SizeRouter.router";
 const DevConfig: IConfig = {
     server: {
         port: 10000,
@@ -15,6 +16,9 @@ const DevConfig: IConfig = {
 
 
       }
+    },
+    auth: {
+      allowAllRoutesWithoutAuthTokens: true,
     },
     database: {
         host: 'localhost',
@@ -34,6 +38,7 @@ const DevConfig: IConfig = {
     routers: [
       new CategoryRouter(),
       new AdministratorRouter(),
+      new SizeRouter(),
     ],
     fileUploads: {
       maxFiles: 5,
@@ -67,8 +72,10 @@ const DevConfig: IConfig = {
                   defaultBackground: { r: 0, g: 0, b: 0, alpha: 1, }
               },
           ],
-      },
+      },  
   },
+  
+  
 };
 
 
